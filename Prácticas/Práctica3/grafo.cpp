@@ -72,7 +72,6 @@ void GRAFO::build (char nombrefichero[85], int &errorapertura) {
 
         dummy.j = i-1;
         LS[j-1].push_back(dummy);
-
       }
     }
 
@@ -175,9 +174,34 @@ void GRAFO::ListaPredecesores() { //Recorre la lista de sucesores LS para constr
 
 void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) { //Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados, para su uso en la construccion de Componentes Conexas
   
+  visitado[i] = true;
+  cout << i+1;
+
+  for (unsigned j{}; j < LS[i].size(); j++) {
+
+    if (!visitado[LS[i][j].j]) {
+
+      cout << ", ";
+      dfs_cc(LS[i][j].j);
+    }
+  }
 }
 
 void GRAFO::ComponentesConexas() {
+
+  unsigned i{}, componentesconexas{};
+  vector<bool> visitado{};
+  visitado.resize(n,false);
+
+  for (unsigned i{}; i < n; i++) {
+
+    if (!visitado[i]) {
+
+      componentesconexas++;
+      cout << "componente Conexa"
+    }
+  }
+
   
 }
 
