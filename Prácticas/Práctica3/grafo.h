@@ -4,7 +4,7 @@
   * Grado en Ingeniería Informática
   * Optimización 2025-2026
   *
-  * @file polynomial.h
+  * @file grafo.h
   * @author Jonay Déniz Hernández  alu0101791623@ull.edu.es
   * @date March 28 2026
   * @brief Declaración de la clase grafo
