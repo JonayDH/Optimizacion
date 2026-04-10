@@ -198,22 +198,74 @@ void GRAFO::ComponentesConexas() {
     if (!visitado[i]) {
 
       componentesconexas++;
-      cout << "componente Conexa"
-    }
-  }
+      cout << "componente Conexa" << componentesconexas << "{:";
 
-  
+      dfs_cc(i,visitado);
+    }
+    
+    i++;
+  }
 }
 
 void GRAFO::dfs_cfc(unsigned i, vector<bool> &visitado) { //Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados, para su uso en la construccion de Componentes fuertemente Conexas
 
+  visitado[i] = true;
+  cout << i + 1 << " ";
+
+  for (unsigned j{}; j < LP[i].size();j++) {
+
+    if (!visitado[LP[i][j].j]) {
+
+      dfs_cfc(LS[i][j].j,visitado);
+    }
+  }
 }
 
 void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &postnum, unsigned &postnum_ind) { //Este recorrido esta� hecho adhoc para calcular el orden postnumeraci�n de los nodos
 
+  visitado[i] = true;
+  
+  for (unsigned j{}; j < LS[i].size(); j++) {
+
+    if (!visitado[LS[i][j].j]) {
+
+      dfs_postnum(LS[i][j].j, visitado, postnum, postnum_ind);
+    }
+  }
+
+  postnum[postnum_ind--] = i;
 }
 
 void GRAFO::ComponentesFuertementeConexas() {
 
+  unsigned i{}, postnum_ind{}, componentesfuertementeconexas{};
+  vector<bool> visitado;
+  vector<unsigned> postnum;
+
+  visitado.resize(n,false);
+  postnum.resize(n,UERROR);
+  postnum_ind = n-1;
+
+  for (unsigned i{}; i < n; i++) {
+
+    if (!visitado[i]) {
+
+      dfs_postnum(i,visitado,postnum,postnum_ind);
+    }
+  }
+
+  visitado.resize(n,false);
+
+  i = 0;
+
+  for (unsigned i{}; i < n; i++) {
+
+    if (!visitado[postnum[i]]) {
+
+      componentesfuertementeconexas++;
+      cout << "componente Fuertemente Conexa" << componentesfuertementeconexas << ":{";
+      dfc_cfc(postnum[i],visitado);
+    }
+  }
 }
 
