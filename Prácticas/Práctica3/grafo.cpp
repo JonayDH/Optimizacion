@@ -182,14 +182,14 @@ void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) { //Este recorrido estaï¿
     if (!visitado[LS[i][j].j]) {
 
       cout << ", ";
-      dfs_cc(LS[i][j].j);
+      dfs_cc(LS[i][j].j, visitado);
     }
   }
 }
 
 void GRAFO::ComponentesConexas() {
 
-  unsigned i{}, componentesconexas{};
+  unsigned componentesconexas{};
   vector<bool> visitado{};
   visitado.resize(n,false);
 
@@ -198,25 +198,33 @@ void GRAFO::ComponentesConexas() {
     if (!visitado[i]) {
 
       componentesconexas++;
-      cout << "componente Conexa" << componentesconexas << "{:";
+      cout << "Componente conexa " << componentesconexas << " : {";
 
       dfs_cc(i,visitado);
+      cout << "}" << endl;
     }
-    
-    i++;
+  }
+
+  if (componentesconexas > 1) {
+
+    cout << "El grafo NO es conexo" << endl;
+  } else if (componentesconexas == 1) {
+
+    cout << "El grafo es conexo" << endl;
   }
 }
 
 void GRAFO::dfs_cfc(unsigned i, vector<bool> &visitado) { //Este recorrido estaï¿½ hecho adhoc para mostrar el ritmo de nodos visitados, para su uso en la construccion de Componentes fuertemente Conexas
 
   visitado[i] = true;
-  cout << i + 1 << " ";
+  cout << i + 1;
 
   for (unsigned j{}; j < LP[i].size();j++) {
 
     if (!visitado[LP[i][j].j]) {
 
-      dfs_cfc(LS[i][j].j,visitado);
+      cout << ", ";
+      dfs_cfc(LP[i][j].j,visitado);
     }
   }
 }
@@ -238,7 +246,7 @@ void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &po
 
 void GRAFO::ComponentesFuertementeConexas() {
 
-  unsigned i{}, postnum_ind{}, componentesfuertementeconexas{};
+  unsigned postnum_ind{}, componentesfuertementeconexas{};
   vector<bool> visitado;
   vector<unsigned> postnum;
 
@@ -254,17 +262,20 @@ void GRAFO::ComponentesFuertementeConexas() {
     }
   }
 
-  visitado.resize(n,false);
+  for (unsigned i{}; i < n; i++) {
 
-  i = 0;
+    visitado[i] = false;
+  }
 
   for (unsigned i{}; i < n; i++) {
 
     if (!visitado[postnum[i]]) {
 
       componentesfuertementeconexas++;
-      cout << "componente Fuertemente Conexa" << componentesfuertementeconexas << ":{";
-      dfc_cfc(postnum[i],visitado);
+      cout << "componente Fuertemente Conexa " << componentesfuertementeconexas << ": {";
+      dfs_cfc(postnum[i],visitado);
+
+      cout << "}" << endl;
     }
   }
 }

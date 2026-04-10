@@ -184,12 +184,12 @@ int main(int argc, char *argv[]) {
           if (G.Es_dirigido()) {
 
             cout << "Nodos de las componentes fuertemente conexas:" << endl;
-            // Añadir código
+            G.ComponentesFuertementeConexas();
 
           } else {
 
             cout << "Nodos de las componentes conexas:" << endl;
-            // Añadir codigo
+            G.ComponentesConexas();
           }
 
           pressanykey();
