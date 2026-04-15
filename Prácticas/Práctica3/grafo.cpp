@@ -57,18 +57,18 @@ void GRAFO::build (char nombrefichero[85], int &errorapertura) {
 		LS.resize(n);
     
     // leemos los m arcos
-		for (k=0;k<m;k++) {
+		for (k=0; k<m; k++) {
 
+      // i: Nodo de "origen"
+      // j: Nodo de "destino"
+      // dummy.c: coste de ir de i a j
 			textfile >> (unsigned &) i  >> (unsigned &) j >> (int &) dummy.c;
-			//damos los valores a dummy.j y dummy.c
-			//situamos en la posici�n del nodo i a dummy mediante push_back
-			//pendiente de hacer un segundo push_back si es no dirigido. O no.
-			//pendiente la construcci�n de LP, si es dirigido
-			//pendiente del valor a devolver en errorapertura
-      dummy.j = j-1;
-      LS[i-1].push_back(dummy);
+      dummy.j = j-1; // Internamente almacenamos el nodo como nodo-1
+      LS[i-1].push_back(dummy); // Y lo guardamos en la posición nodo-1 del vector
 
-      if (!dirigido && (i != j)) {
+      // Aqui vamos a guardar el -1, es decir, si el archivo pone que va del nodo 1 al 3, en nuestro vector estará LS[0]=2
+
+      if (!dirigido && (i != j)) { // Si no es dirigido entonces guardamos la arista en sentido contrario también
 
         dummy.j = i-1;
         LS[j-1].push_back(dummy);
@@ -241,7 +241,7 @@ void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &po
     }
   }
 
-  postnum[postnum_ind--] = i;
+  postnum[postnum_ind--] = i; // Rellenamos el postnum (que se va rellenando a medida que visitamos los vectores) al revés de como lo hacemos en clase
 }
 
 void GRAFO::ComponentesFuertementeConexas() {
@@ -254,6 +254,7 @@ void GRAFO::ComponentesFuertementeConexas() {
   postnum.resize(n,UERROR);
   postnum_ind = n-1;
 
+  // Recorrido uno
   for (unsigned i{}; i < n; i++) {
 
     if (!visitado[i]) {
@@ -262,11 +263,14 @@ void GRAFO::ComponentesFuertementeConexas() {
     }
   }
 
+  // Reiniciamos el vector de visitados
   for (unsigned i{}; i < n; i++) {
 
     visitado[i] = false;
   }
 
+  // Hacemos otro recorrido en profundidad pero en el orden inverso de postnum
+  // Pero como ya hemos invertido el postnum en el método dfs_postnum entonces lo recorremos normal
   for (unsigned i{}; i < n; i++) {
 
     if (!visitado[postnum[i]]) {
@@ -278,5 +282,12 @@ void GRAFO::ComponentesFuertementeConexas() {
       cout << "}" << endl;
     }
   }
-}
 
+  if (componentesfuertementeconexas > 1) {
+
+    cout << "El grafo NO es fuertemente conexo" << endl;
+  } else if (componentesfuertementeconexas == 1) {
+
+    cout << "El grafo es fuertermente conexo" << endl;
+  }
+}
