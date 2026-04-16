@@ -185,6 +185,18 @@ void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) { //Este recorrido estaï¿
       dfs_cc(LS[i][j].j, visitado);
     }
   }
+
+  if (dirigido == 1) {
+
+    for (unsigned j{}; j < LP[i].size(); j++) {
+
+      if (!visitado[LP[i][j].j]) {
+
+        cout << ", ";
+        dfs_cc(LP[i][j].j, visitado);
+      }
+    }
+  }
 }
 
 void GRAFO::ComponentesConexas() {
