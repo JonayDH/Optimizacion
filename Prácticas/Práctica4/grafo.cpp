@@ -22,42 +22,72 @@
 
 #include "grafo.h"
 
-// Añadir criterio de parada si el grafo no es conexo cuando hagamos el algoritmo de Prim
 void GRAFO::Prim() {
 
-  vector<bool> T(n, false);
-  vector<int> M{};
+  vector<bool> encontrado(n, false);
   vector<int> coste(n, maxint);
-  vector<int> pred(n, -1);
+  vector<int> predecesor(n, -1);
+  vector<int> nodos{};
   
-  int r{0};
+  int nodo_inicio{0};
+  int coste_total{};
 
-  cout << "Introduce un nodo de inicio: ";
-  cin >> r;
-  r--;
+  while ((nodo_inicio < 1) || (nodo_inicio >  static_cast<int>(n))) {
+
+    cout << "Introduce un nodo de inicio [1, " << n << "]: ";
+    cin >> nodo_inicio;
+  }
+
+  nodo_inicio--;
   cout << endl;
 
-  coste[r] = 0;
+  coste[nodo_inicio] = 0;
+  predecesor[nodo_inicio] = nodo_inicio;
+  encontrado[nodo_inicio] = true;
+  nodos.push_back(nodo_inicio);
 
-  M.push_back(r);
-  T[r] = true;
+  while (nodos.size() < n) {
 
-  while (M.size() < n) {
+    int ultimo_nodo = nodos.back();
 
-    int u = M.back();
+    for (size_t i{}; i < LS[ultimo_nodo].size(); i++) {
 
-    for (int j{}; j < LS[u].size(); j++) {
+      int coste_nuevo = LS[ultimo_nodo][i].c;
+      int nodo_nuevo = LS[ultimo_nodo][i].j;
 
-      if ((T[j] == false) && (LS[u][j].c < coste[j])) {
+      if ((coste_nuevo < coste[nodo_nuevo]) && (!encontrado[nodo_nuevo])) {
 
-        coste[j] = LS[u][j].c;
-        pred[j] = u;
+        coste[nodo_nuevo] = coste_nuevo;
+        predecesor[nodo_nuevo] = ultimo_nodo;
       }
     }
 
-    for (int )
+    int coste_minimo = maxint;
+    int nodo{};
 
+    for (size_t j{0}; j < coste.size(); j++) {
+
+      if ((coste[j] < coste_minimo) && (!encontrado[j])) {
+
+        coste_minimo = coste[j];
+        nodo = j;
+      }
+    }
+
+    if (coste_minimo == maxint) {
+
+      cout << "El grafo no es conexo" << endl;
+      return;
+    }
+
+    cout << "Arista (" << predecesor[nodo] + 1 << ", " << nodo + 1 << ") con coste " << coste_minimo << " añadida" << endl;
+
+    coste_total += coste_minimo;
+    encontrado[nodo] = true;
+    nodos.push_back(nodo);
   }
+
+  cout << "El coste total del arbol generador de mínimo coste es: " << coste_total << endl;
 }
 
 void GRAFO::destroy() {

@@ -42,6 +42,7 @@ void menu (unsigned dirigido, char &opcion) {
     cout << "i. Mostrar [i]nformacion basica del grafo" << endl;
     cout << "a. Mostrar la lista de [a]dyacencia del grafo" << endl;
     cout << "o. Mostrar c[o]mponentes conexas del grafo" << endl;
+    cout << "r. Algoritmo de P[r]im para determinar el árbol generado de mínimo peso" << endl;
 	  //Aqu� se a�aden m�s opciones al men� del grafo no dirigido
   } else {
 
@@ -91,6 +92,22 @@ int main(int argc, char *argv[]) {
 
       menu(G.Es_dirigido(), opcion);
       switch (opcion) {
+
+        case 'r':
+
+          clrscr();
+
+          if(G.Es_dirigido()) {
+
+            cout << "No puedes ejecutar esta opción con este tipo de grafo" << endl;
+          } else {
+
+            G.Prim();
+          }
+
+          pressanykey();
+          clrscr();
+          break;
 
         case 'c':
 
