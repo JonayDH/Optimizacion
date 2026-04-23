@@ -34,6 +34,7 @@ void GRAFO::Prim() {
 
   cout << "Introduce un nodo de inicio: ";
   cin >> r;
+  r--;
   cout << endl;
 
   coste[r] = 0;
