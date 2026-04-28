@@ -50,6 +50,7 @@ void GRAFO::Prim() {
 
     int ultimo_nodo = nodos.back();
 
+    // Actualizamos los costes de los sucesores del último nodo
     for (size_t i{}; i < LS[ultimo_nodo].size(); i++) {
 
       int coste_nuevo = LS[ultimo_nodo][i].c;
@@ -65,7 +66,8 @@ void GRAFO::Prim() {
     int coste_minimo = maxint;
     int nodo{};
 
-    for (size_t j{0}; j < coste.size(); j++) {
+    // Buscamos cual es el coste mínimo
+    for (size_t j{}; j < coste.size(); j++) {
 
       if ((coste[j] < coste_minimo) && (!encontrado[j])) {
 
