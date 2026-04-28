@@ -29,7 +29,7 @@ void GRAFO::Prim() {
   vector<int> predecesor(n, -1);
   vector<int> nodos{};
   
-  int nodo_inicio{0};
+  int nodo_inicio{};
   int coste_total{};
 
   while ((nodo_inicio < 1) || (nodo_inicio >  static_cast<int>(n))) {
