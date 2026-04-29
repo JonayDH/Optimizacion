@@ -22,6 +22,7 @@
 
 #include "grafo.h"
 
+/// @brief Método que calcula el árbol generador de mínimo coste usando prim
 void GRAFO::Prim() {
 
   vector<bool> encontrado(n, false);
@@ -32,13 +33,14 @@ void GRAFO::Prim() {
   int nodo_inicio{};
   int coste_total{};
 
-  while ((nodo_inicio < 1) || (nodo_inicio >  static_cast<int>(n))) {
+  // Pedimos un nodo para hacer Prim
+  while ((nodo_inicio < 1) || (nodo_inicio > static_cast<int>(n))) {
 
     cout << "Introduce un nodo de inicio [1, " << n << "]: ";
     cin >> nodo_inicio;
   }
 
-  nodo_inicio--;
+  nodo_inicio--; // Ajustamos a como guardamos nosotros los nodos
   cout << endl;
 
   coste[nodo_inicio] = 0;
@@ -64,7 +66,7 @@ void GRAFO::Prim() {
     }
 
     int coste_minimo = maxint;
-    int nodo{};
+    int nodo_minimo{};
 
     // Buscamos cual es el coste mínimo
     for (size_t j{}; j < coste.size(); j++) {
@@ -72,7 +74,7 @@ void GRAFO::Prim() {
       if ((coste[j] < coste_minimo) && (!encontrado[j])) {
 
         coste_minimo = coste[j];
-        nodo = j;
+        nodo_minimo = j;
       }
     }
 
@@ -82,16 +84,17 @@ void GRAFO::Prim() {
       return;
     }
 
-    cout << "Arista (" << predecesor[nodo] + 1 << ", " << nodo + 1 << ") con coste " << coste_minimo << " añadida" << endl;
+    cout << "Arista (" << predecesor[nodo_minimo] + 1 << ", " << nodo_minimo + 1 << ") con coste " << coste_minimo << " añadida" << endl;
 
     coste_total += coste_minimo;
-    encontrado[nodo] = true;
-    nodos.push_back(nodo);
+    encontrado[nodo_minimo] = true;
+    nodos.push_back(nodo_minimo);
   }
 
   cout << "El coste total del arbol generador de mínimo coste es: " << coste_total << endl;
 }
 
+/// @brief Método para destruir un grafo
 void GRAFO::destroy() {
 
 	for (unsigned i=0; i< n; i++) {
@@ -110,6 +113,7 @@ void GRAFO::destroy() {
   }
 }
 
+/// @brief Método para construir un grafo
 void GRAFO::build (char nombrefichero[85], int &errorapertura) {
 
   ElementoLista     dummy;
@@ -155,16 +159,19 @@ void GRAFO::build (char nombrefichero[85], int &errorapertura) {
   } 
 }
 
+/// @brief Destructor de la clase
 GRAFO::~GRAFO() {
 
 	destroy();
 }
 
+/// @brief Constructor de la clase
 GRAFO::GRAFO(char nombrefichero[85], int &errorapertura) {
 
 	build (nombrefichero, errorapertura);
 }
 
+/// @brief Método para volver a recargar un nuevo grafo
 void GRAFO::actualizar (char nombrefichero[85], int &errorapertura) {
 
   //Limpiamos la memoria dinamica asumida en la carga previa, como el destructor
@@ -173,11 +180,13 @@ void GRAFO::actualizar (char nombrefichero[85], int &errorapertura) {
   build(nombrefichero, errorapertura);
 }
 
+/// @brief Getter de dirigido
 unsigned GRAFO::Es_dirigido() {
 
   return dirigido;
 }
 
+/// @brief Método que devuelve la información básica del grafo
 void GRAFO::Info_Grafo() {
 
   if (Es_dirigido()) {
@@ -189,6 +198,7 @@ void GRAFO::Info_Grafo() {
   }
 }
 
+/// @brief Método para poder mostrar una lista
 void Mostrar_Lista(vector<LA_nodo> L) {
   
   ElementoLista aux;
@@ -213,6 +223,7 @@ void Mostrar_Lista(vector<LA_nodo> L) {
   }
 }
 
+/// @brief Método para mostrar listas
 void GRAFO::Mostrar_Listas (int l) {
 
   if (l == 1) {
@@ -227,7 +238,8 @@ void GRAFO::Mostrar_Listas (int l) {
   }
 }
 
-void GRAFO::ListaPredecesores() { //Recorre la lista de sucesores LS para construir la de predecesores, LP
+/// @brief Método para generar la lista de predecesores
+void GRAFO::ListaPredecesores() {
 
   ElementoLista aux;
   LP.resize(n);
@@ -242,7 +254,8 @@ void GRAFO::ListaPredecesores() { //Recorre la lista de sucesores LS para constr
   }
 }
 
-void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) { //Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados, para su uso en la construccion de Componentes Conexas
+/// @brief Método que hace un recorrido en profundidad para calcular las componentes conexas
+void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) {
   
   visitado[i] = true;
   cout << i+1;
@@ -269,6 +282,7 @@ void GRAFO::dfs_cc(unsigned i, vector<bool> &visitado) { //Este recorrido esta�
   }
 }
 
+/// @brief Método que calcula las componentes conexas
 void GRAFO::ComponentesConexas() {
 
   unsigned componentesconexas{};
@@ -296,7 +310,8 @@ void GRAFO::ComponentesConexas() {
   }
 }
 
-void GRAFO::dfs_cfc(unsigned i, vector<bool> &visitado) { //Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados, para su uso en la construccion de Componentes fuertemente Conexas
+/// @brief Método que hace un recorrido en profundidad para calcular las componentes fuertemente conexas
+void GRAFO::dfs_cfc(unsigned i, vector<bool> &visitado) {
 
   visitado[i] = true;
   cout << i + 1;
@@ -311,7 +326,8 @@ void GRAFO::dfs_cfc(unsigned i, vector<bool> &visitado) { //Este recorrido esta�
   }
 }
 
-void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &postnum, unsigned &postnum_ind) { //Este recorrido esta� hecho adhoc para calcular el orden postnumeraci�n de los nodos
+/// @brief Método que hace un recorrido en profundidad para calcular el postnum
+void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &postnum, unsigned &postnum_ind) {
 
   visitado[i] = true;
   
@@ -326,6 +342,7 @@ void GRAFO::dfs_postnum(unsigned i, vector<bool> &visitado, vector<unsigned> &po
   postnum[postnum_ind--] = i; // Rellenamos el postnum (que se va rellenando a medida que visitamos los vectores) al revés de como lo hacemos en clase
 }
 
+/// @brief Método que calcula las componentes fuertemente conexas
 void GRAFO::ComponentesFuertementeConexas() {
 
   unsigned postnum_ind{}, componentesfuertementeconexas{};
