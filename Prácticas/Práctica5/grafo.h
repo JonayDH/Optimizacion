@@ -68,7 +68,9 @@ class GRAFO {
 	  void dfs_cfc(unsigned i, vector<bool> &visitado); // Recorrido en profundidad recursivo con solo marca de visitado para el calculo de las componentes fuertemente conexas
     
   public:
-     
+    
+    int CosteMinimo();
+    bool HayCicloNegativo(vector<int>& distancias, int coste_minimo);
     void TWOQ();
     void Prim();
     GRAFO(char nombrefichero[], int &errorapertura);
@@ -81,5 +83,8 @@ class GRAFO {
     void ComponentesFuertementeConexas(); //
     ~GRAFO(); //Destructor del objeto grafo
 };
+
+void MostrarCamino(unsigned s, unsigned i, vector<unsigned>& predecesor);
+
 
 #endif

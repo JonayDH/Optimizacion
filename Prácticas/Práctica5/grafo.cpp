@@ -22,17 +22,18 @@
 
 #include "grafo.h"
 
+/// @brief Método que aplica el algoritmo TWOQ
 void GRAFO::TWOQ() {
 
   deque<unsigned> colarapida{}, colalenta{};
   vector<int> distancia(n, maxint);
-  vector<unsigned> predecesor(n, -1);
+  vector<unsigned> predecesor(n, UERROR);
   vector<bool> encola(n, false);
 
   unsigned nodo_inicio{};
+  int coste_minimo = CosteMinimo();
 
-  // Pedimos un nodo para hacer Prim
-  while ((nodo_inicio < 1) || (nodo_inicio > static_cast<int>(n))) {
+  while ((nodo_inicio < 1) || (nodo_inicio > n)) {
 
     cout << "Introduce un nodo de inicio [1, " << n << "]: ";
     cin >> nodo_inicio;
@@ -41,37 +42,119 @@ void GRAFO::TWOQ() {
   nodo_inicio--; // Ajustamos a como guardamos nosotros los nodos
   cout << endl;
 
+  distancia[nodo_inicio] = 0;
+  predecesor[nodo_inicio] = nodo_inicio;
   colalenta.push_back(nodo_inicio);
   encola[nodo_inicio] = true;
 
-  while (!colarapida.empty() || !colalenta.empty()) {
+  while ((!colarapida.empty() || !colalenta.empty()) && !HayCicloNegativo(distancia, coste_minimo)) {
 
-    unsigned primer_nodo{};
+    unsigned nodo_actual{};
 
-    if (colarapida.empty() == true) {
+    if (colarapida.empty() == false) {
 
-      primer_nodo = colarapida.front();
+      nodo_actual = colarapida.front();
       colarapida.pop_front();
-      encola[primer_nodo] = false;
+      encola[nodo_actual] = false;
     } else {
 
-      primer_nodo = colalenta.front();
+      nodo_actual = colalenta.front();
       colalenta.pop_front();
-      encola[primer_nodo] = false;
+      encola[nodo_actual] = false;
     }
 
+    for (size_t i{}; i < LS[nodo_actual].size(); i++) {
+      
+      int distancia_nueva = distancia[nodo_actual] + LS[nodo_actual][i].c;
+      unsigned sucesor = LS[nodo_actual][i].j;
+
+      if (distancia_nueva < distancia[sucesor]) {
+
+        if (predecesor[sucesor] == UERROR) {
+
+          colalenta.push_back(sucesor);
+          encola[sucesor] = true;
+        } else if (encola[sucesor] == false) {
+
+          colarapida.push_back(sucesor);
+          encola[sucesor] = true;
+        }
+
+        distancia[sucesor] = distancia_nueva;
+        predecesor[sucesor] = nodo_actual;
+      }
+    }
+  }
+
+  if (HayCicloNegativo(distancia, coste_minimo)) {
+
+    cout << "Hay un ciclo de coste negativo en el grafo." << endl;
+  } else {
+
+    cout << "Soluciones: " << endl << endl;
+
+    for (unsigned nodo_final{}; nodo_final < n; nodo_final++) {
+
+      if (predecesor[nodo_final] == UERROR) {
+
+        cout << "No hay camino desde " << nodo_inicio + 1 << " al nodo " << nodo_final + 1;
+        cout << endl;
+      } else if (nodo_final != nodo_inicio) {
+
+        cout << "El camino desde " << nodo_inicio + 1 << " al nodo " << nodo_final + 1 << " es : "; 
+        MostrarCamino(nodo_inicio, nodo_final, predecesor);
+        cout << " de longitud " << distancia[nodo_final];
+        cout << endl;
+      }
+    }
   }
 }
 
-void MostrarCamino(unsigned s, unsigned i, vector<unsigned> predecesor) {
+/// @brief Método que calcula el arco con el coste mínimo
+int GRAFO::CosteMinimo() {
 
-  if (i != s) {
+  int coste_minimo{};
 
-    MostrarCamino(s, predecesor[i], predecesor);
-    cout << " -> " << i + 1;
+  for (unsigned nodo_actual{}; nodo_actual < n; nodo_actual++) {
+
+    for (size_t sucesor{}; sucesor < LS[nodo_actual].size(); sucesor++) {
+
+      if (LS[nodo_actual][sucesor].c < coste_minimo) {
+
+        coste_minimo = LS[nodo_actual][sucesor].c;
+      }
+    }
+  }
+  
+  return coste_minimo;
+}
+
+/// @brief Método que dice si hay ciclos de coste negativo o no
+bool GRAFO::HayCicloNegativo(vector<int>& distancia, int coste_minimo) {
+
+  bool ciclo_negativo{false};
+
+  for (size_t i {}; (i < distancia.size()) && (!ciclo_negativo); i++) {
+
+    if (distancia[i] < ((static_cast<int>(n)-1) * coste_minimo)) {
+
+      ciclo_negativo = true;
+    }
+  }
+
+  return ciclo_negativo;
+}
+
+/// @brief Método que sirve para mostrar un camino
+void MostrarCamino(unsigned nodo_inicio, unsigned nodo_final, vector<unsigned>& predecesor) {
+
+  if (nodo_final != nodo_inicio) {
+
+    MostrarCamino(nodo_inicio, predecesor[nodo_final], predecesor);
+    cout << " -> " << nodo_final + 1;
   } else {
 
-    cout << i + 1;
+    cout << nodo_final + 1;
   }
 }
 
