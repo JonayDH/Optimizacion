@@ -50,7 +50,7 @@ void menu (unsigned dirigido, char &opcion) {
     cout << "s. Mostrar la lista de [s]ucesores del grafo" << endl;
     cout << "p. Mostrar la lista de [p]redecesores del grafo" << endl;
     cout << "o. Mostrar c[o]mponentes fuertemente conexas del grafo" << endl;
-    cout << "w. Algoritmo T[w]oq" << endl;
+    cout << "t. Algoritmo [T]WOQ para los caminos mínimos desde un nodo s"<< endl;
 	  //Aqu� se a�aden m�s opciones al men� del grafo dirigido
   }
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
       menu(G.Es_dirigido(), opcion);
       switch (opcion) {
 
-        case 'w':
+        case 't':
 
           clrscr();
 

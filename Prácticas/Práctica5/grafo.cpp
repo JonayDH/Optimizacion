@@ -33,6 +33,9 @@ void GRAFO::TWOQ() {
   unsigned nodo_inicio{};
   int coste_minimo = CosteMinimo();
 
+  cout << "Camino mínimo de un nodo al resto: Algoritmo TWOQ" << endl;
+
+  // Pedimos un nodo de inicio
   while ((nodo_inicio < 1) || (nodo_inicio > n)) {
 
     cout << "Introduce un nodo de inicio [1, " << n << "]: ";
@@ -47,10 +50,12 @@ void GRAFO::TWOQ() {
   colalenta.push_back(nodo_inicio);
   encola[nodo_inicio] = true;
 
+  // Mientras que alguna de las colas tenga elementos y no hayas ciclos negativos iteramos
   while ((!colarapida.empty() || !colalenta.empty()) && !HayCicloNegativo(distancia, coste_minimo)) {
 
     unsigned nodo_actual{};
 
+    // Sacamos el primer nodo de la cola
     if (colarapida.empty() == false) {
 
       nodo_actual = colarapida.front();
@@ -63,18 +68,21 @@ void GRAFO::TWOQ() {
       encola[nodo_actual] = false;
     }
 
+    // Miramos los sucesores de ese nodo
     for (size_t i{}; i < LS[nodo_actual].size(); i++) {
       
       int distancia_nueva = distancia[nodo_actual] + LS[nodo_actual][i].c;
       unsigned sucesor = LS[nodo_actual][i].j;
 
+      // Si la distancia del sucesor es mayor que la distancia del nodo + lo que cuesta ir del nodo al sucesor
       if (distancia_nueva < distancia[sucesor]) {
 
+        // Si nunca ha estado en la cola
         if (predecesor[sucesor] == UERROR) {
 
           colalenta.push_back(sucesor);
           encola[sucesor] = true;
-        } else if (encola[sucesor] == false) {
+        } else if (encola[sucesor] == false) { // Si si ha estado pero ahora no esta en cola
 
           colarapida.push_back(sucesor);
           encola[sucesor] = true;
