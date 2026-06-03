@@ -3,7 +3,14 @@
 ## Prácticas:
 
   - Prácticas de la 3 a la 5 (clase GRAFO)
-    
+
+---
+
+## ⭐ Apoya el proyecto
+
+Si este repositorio te ha resultado útil, considera dejar una ⭐ en GitHub.
+Es una forma sencilla de mostrar apoyo y ayuda a que más estudiantes encuentren estos recursos.
+
 --- 
 
 ## Descargo de responsabilidad
